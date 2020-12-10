@@ -3,6 +3,7 @@
 #include <stdbool.h>
 #include <ctype.h>
 #include <math.h>
+#include <limits.h>
 
 #include "Graph.h"
 #include "Heap.h"

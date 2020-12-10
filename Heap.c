@@ -9,6 +9,7 @@ struct Heap* InitializeHeap(int capacity) {
     for (int index = 0 ; index < capacity ; index++) {
         (heap -> heapArray)[index].isValid = false;
         (heap -> heapArray)[index].vertex = -1;
+        (heap -> heapArray)[index].dValue = -1;
     }
     return heap;
 }
@@ -20,9 +21,10 @@ void HeapInsert(struct Heap* heap, int id, double key) {
         heap -> heapArray[index].dValue = heap -> heapArray[(int) floor(((double) index + 1) / 2.0)].dValue;
         heap -> heapArray[index].vertex = heap -> heapArray[(int) floor(((double) index + 1) / 2.0)].vertex;
         index = (int) floor(((double) index + 1) / 2.0);
-        heap -> heapArray[index].dValue = key;
-        heap -> heapArray[index].vertex = id;
+        
     }
+    heap -> heapArray[index].dValue = key;
+    heap -> heapArray[index].vertex = id;
     heap -> numberOfElements++;
 }
 

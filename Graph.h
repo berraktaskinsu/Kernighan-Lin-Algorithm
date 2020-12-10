@@ -13,6 +13,7 @@ struct ListNode
 
 struct List
 {
+    int set;
     struct ListNode* head;
 };
 

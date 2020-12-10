@@ -14,6 +14,7 @@
 void RunKLAlgorithm(struct Graph* graph) {
 
     struct Set** sets = BuildSetsFromGraph(graph);
+    
     PrintSets(sets);
     printf("_______________________Algorithm Started\n");
 
@@ -27,11 +28,32 @@ void RunKLAlgorithm(struct Graph* graph) {
     heaps[0] = InitializeHeap(capacity1);
     heaps[1] = InitializeHeap(capacity2);
 
-    
+    double dValue;
+    int myVertex, myCount = 0, yourCount = 0;
+    for (int setNo = 1 ; setNo < 3 ; setNo++) {
+        for (int index = 0 ; index < sets[setNo - 1] -> numberOfElements ; index++) 
+        {
+            printf("%d", setNo);
+            myVertex = sets[setNo - 1] -> setArray[index].vertex;
+            struct ListNode* current = graph -> listArray[myVertex - 1].head;
+            
+            while (current != NULL) 
+            {
+                if (graph -> listArray[current -> neighbour - 1].set == setNo) {
+                    myCount++;
+                } 
+                else
+                {
+                    yourCount++;
+                }
+                current = current -> next;
+            }
+            dValue = yourCount - myCount;
+            printf("Set No: %d, Vertex: %d, D: %d", setNo, myVertex, (int)dValue);
+            HeapInsert(heaps[setNo - 1], myVertex, dValue);
+        }
+    }
 
-    //double dValue1, dValue2;
-    //HeapInsert(heaps[0], dValue1);
-    //HeapInsert(heaps[1], dValue2);
     //PrintHeaps(heaps);
 
     printf("_______________________End\n");
@@ -133,10 +155,13 @@ struct Set** BuildSetsFromGraph(struct Graph* graph) {
     int index;
     for (index = 0 ; index < numberOfVertices1 ; index++) {
         AddElementToSet(sets[0], index + 1);
+        graph -> listArray[index].set = 1;
     }
     for ( ; index < numberOfVertices1 + numberOfVertices2 ; index++) {
         AddElementToSet(sets[1], index + 1);
+        graph -> listArray[index].set = 2;
     }
+    
     return sets;
 }
 

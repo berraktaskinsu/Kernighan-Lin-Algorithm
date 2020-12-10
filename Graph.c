@@ -18,6 +18,7 @@ struct Graph* InitializeGraph(int numberOfVertices) {
 
     for (int index = 0 ; index < numberOfVertices ; index++) {
         ((graph -> listArray)[index]).head = NULL;
+        ((graph -> listArray)[index]).set = 0;
     }
 
     return graph;
@@ -48,7 +49,7 @@ void PrintGraph(struct Graph* graph) {
     for (int index = 0 ; index < graph -> numberOfVertices ; index++) {
         vertex = index + 1;
 
-        printf("Vertex %d: ", vertex);
+        printf("Vertex %d Set No %d:", vertex, graph ->listArray[index].set);
         struct ListNode* current = ((graph -> listArray)[index]).head;
         while (current != NULL && current -> next != NULL) {
             printf("%d, ", current -> neighbour);
