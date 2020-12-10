@@ -54,7 +54,7 @@ void RunKLAlgorithm(struct Graph* graph) {
         }
     }
 
-    //PrintHeaps(heaps);
+    PrintHeaps(heaps);
 
     printf("_______________________End\n");
     DeleteHeaps(heaps);

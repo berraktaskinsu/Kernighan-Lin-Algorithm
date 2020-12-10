@@ -42,7 +42,7 @@ void AddElementToHeap(struct Heap* heap, int vertex) {
 
 void PrintHeap(struct Heap* heap) {
     for (int index = 0 ; index < heap -> capacity ; index++) {
-        printf("%d, isValid:%s\n", (heap -> heapArray)[index].vertex, (heap -> heapArray)[index].isValid ? "true" : "false");
+        printf("Vertex: %d, D: %d, isValid:%s\n", (heap -> heapArray)[index].vertex, (int) heap ->heapArray[index].dValue, (heap -> heapArray)[index].isValid ? "true" : "false");
     }
 }
 
