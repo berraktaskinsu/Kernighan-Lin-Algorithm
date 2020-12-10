@@ -1,15 +1,28 @@
-CXX = g++
-CXXFLAGS = -Wall -Werror -Wextra -pedantic -std=c++17 -g -fsanitize=address
-LDFLAGS =  -fsanitize=address
+CC=gcc
+CFLAGS=-g -Wall
 
-SRC = 
-OBJ = $(SRC:.cc=.o)
-EXEC = KL
+all: KL
 
-all: $(EXEC)
+KL: Main.o KLGenerator.o Graph.o Heap.o Set.o Helper.o
+	$(CC) $(CFLAGS) -o KL Main.o KLGenerator.o Graph.o Heap.o Set.o Helper.o -lm
 
-$(EXEC): $(OBJ)
-	$(CXX) $(LDFLAGS) -o $@ $(OBJ) $(LBLIBS)
+Main.o: Main.c KLGenerator.h
+	$(CC) $(CFLAGS) -c Main.c
+
+KLGenerator.o: KLGenerator.c KLGenerator.h Graph.h Heap.h
+	$(CC) $(CFLAGS) -c KLGenerator.c
+
+Graph.o: Graph.c Graph.h Helper.h
+	$(CC) $(CFLAGS) -c Graph.c
+
+Heap.o: Heap.c Heap.h Helper.h
+	$(CC) $(CFLAGS) -c Heap.c
+
+Set.o: Set.c Set.h Helper.h
+	$(CC) $(CFLAGS) -c Set.c
+
+Helper.o: Helper.c Helper.h
+	$(CC) $(CFLAGS) -c Helper.c
 
 clean:
-	rm -rf $(OBJ) $(EXEC)
+	$(RM) KL *.o *~
