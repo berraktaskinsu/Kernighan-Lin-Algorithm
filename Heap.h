@@ -26,8 +26,6 @@ void HeapInsert(struct Heap* heap, int vertex, double dValue);
 // TODO: Implement
 struct HeapArrayElement* ExtractMax(struct Heap* heap);
 
-void AddElementToHeap(struct Heap* heap, int vertex);
-
 // TODO: Implement
 void PrintHeap(struct Heap* heap);
 

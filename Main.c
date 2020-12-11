@@ -18,6 +18,6 @@ int main() {
     }
     PrintGraph(graph);
     RunKLAlgorithm(graph);
-    DeleteGraph(&graph);
+    DeleteGraph(graph);
     return 0;
 }

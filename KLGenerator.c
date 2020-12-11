@@ -14,7 +14,6 @@
 void RunKLAlgorithm(struct Graph* graph) {
 
     struct Set** sets = BuildSetsFromGraph(graph);
-    
     PrintSets(sets);
     printf("_______________________Algorithm Started\n");
 
@@ -28,14 +27,21 @@ void RunKLAlgorithm(struct Graph* graph) {
     heaps[0] = InitializeHeap(capacity1);
     heaps[1] = InitializeHeap(capacity2);
 
+    /**
+     * @brief Create the Initial Heaps
+     * 
+     *  Find d values of each vertex in the sets and add them to the corresponding set
+     * ! Do we really need Set class, won't heap be enough?
+     */
     double dValue;
-    int myVertex, myCount = 0, yourCount = 0;
+    int vertex, myCount, yourCount;
     for (int setNo = 1 ; setNo < 3 ; setNo++) {
         for (int index = 0 ; index < sets[setNo - 1] -> numberOfElements ; index++) 
         {
-            printf("%d", setNo);
-            myVertex = sets[setNo - 1] -> setArray[index].vertex;
-            struct ListNode* current = graph -> listArray[myVertex - 1].head;
+            myCount = 0;
+            yourCount = 0;
+            vertex = sets[setNo - 1] -> setArray[index].vertex;
+            struct ListNode* current = graph -> listArray[vertex - 1].head;
             
             while (current != NULL) 
             {
@@ -49,12 +55,12 @@ void RunKLAlgorithm(struct Graph* graph) {
                 current = current -> next;
             }
             dValue = yourCount - myCount;
-            printf("Set No: %d, Vertex: %d, D: %d", setNo, myVertex, (int)dValue);
-            HeapInsert(heaps[setNo - 1], myVertex, dValue);
+            printf("Set No: %d, Vertex: %d, D: %d\n", setNo, vertex, (int)dValue);
+            HeapInsert(heaps[setNo - 1], vertex, dValue);
         }
     }
-
     PrintHeaps(heaps);
+    
 
     printf("_______________________End\n");
     DeleteHeaps(heaps);
@@ -115,35 +121,6 @@ struct Graph* GenerateGraphFromFile(const char* fileName) {
     return graph;
 }
 
-/*
-struct Heap** BuildHeapFromGraph(struct Graph* graph) {
-
-    
-    int numberOfVertices1 = ceil(((double) (graph -> numberOfVertices)) / 2.0);
-    int numberOfVertices2 = floor(((double) (graph -> numberOfVertices)) / 2.0);
-    int capacity1 = FindNearestPowerOfTwo(numberOfVertices1);
-    int capacity2 = FindNearestPowerOfTwo(numberOfVertices2);
-    printf("Capacity of each binary heap: %d, %d\n", capacity1, capacity2);
-    if (numberOfVertices1 > capacity1 || numberOfVertices2 > capacity2) {
-        perror("numberOfVertices > capacity");
-        exit(EXIT_FAILURE);
-    }
-
-    struct Heap** heaps = malloc(2 * sizeof(struct Heap*));
-    heaps[0] = InitializeHeap(capacity1);
-    heaps[1] = InitializeHeap(capacity2);
-
-    int index;
-    for (index = 0 ; index < numberOfVertices1 ; index++) {
-        AddElementToHeap(heaps[0], index + 1);
-    }
-    for ( ; index < numberOfVertices1 + numberOfVertices2 ; index++) {
-        AddElementToHeap(heaps[1], index + 1);
-    }
-    return heaps;
-}
-*/
-
 struct Set** BuildSetsFromGraph(struct Graph* graph) {
     int numberOfVertices1 = ceil(((double) (graph -> numberOfVertices)) / 2.0);
     int numberOfVertices2 = floor(((double) (graph -> numberOfVertices)) / 2.0);
@@ -179,9 +156,8 @@ void PrintHeaps(struct Heap** heaps) {
     PrintHeap(heaps[1]);
 }
 
-void DeleteGraph(struct Graph** graph) {
-    DeallocateGraph(*graph);
-    *graph = NULL;
+void DeleteGraph(struct Graph* graph) {
+    DeallocateGraph(graph);
 }
 
 void DeleteSets(struct Set** sets) {
