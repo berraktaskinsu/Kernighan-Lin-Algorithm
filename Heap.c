@@ -70,8 +70,15 @@ void BuildHeap(struct Heap* heap) {
 
 // TODO: Implement
 struct HeapArrayElement* ExtractMax(struct Heap* heap) {
-    struct HeapArrayElement* heapArrayElement = &(heap -> heapArray)[0];
-    return heapArrayElement;
+    struct HeapArrayElement* maxElement = (struct HeapArrayElement*) malloc(sizeof(struct HeapArrayElement));
+    maxElement -> dValue = heap -> heapArray[0].dValue;
+    maxElement -> vertex = heap -> heapArray[0].vertex;
+    heap -> heapArray[0].dValue = heap -> heapArray[heap -> numberOfElements - 1].dValue;
+    heap -> heapArray[0].vertex = heap -> heapArray[heap -> numberOfElements - 1].vertex;
+    heap -> heapArray[heap -> numberOfElements - 1].isValid = false;
+    heap -> numberOfElements --;
+    Heapify(heap, 0);
+    return maxElement;
 }
 
 void PrintHeap(struct Heap* heap) {

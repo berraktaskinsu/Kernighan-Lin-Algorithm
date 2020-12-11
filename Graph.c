@@ -45,6 +45,36 @@ void AddEdgeToGraph(struct Graph* graph, int vertex1, int vertex2) {
     AddNeighbor(graph, index2, vertex1);
 }
 
+void AddNeighbor(struct Graph* graph, int index, int neighbour) {
+    struct ListNode* node = (struct ListNode*) malloc (sizeof(struct ListNode));
+    node -> neighbour = neighbour;
+    node -> next = ((graph -> listArray)[index]).head;
+    ((graph -> listArray)[index]).head = node;
+    node = NULL; // not necessary
+}
+
+bool EdgeExists(struct Graph* graph, int vertex1, int vertex2) {
+    if (vertex1 > graph -> numberOfVertices || vertex2 > graph -> numberOfVertices) 
+    {
+        perror("Vertex does not exist in graph");
+        exit(EXIT_FAILURE);
+    }
+    bool exists = false;
+    struct ListNode* current = graph -> listArray[vertex1 - 1].head;
+    while (current != NULL) 
+    {
+        if (current -> neighbour == vertex2) {
+            exists = true;
+            break;
+        }
+        current = current -> next;
+    }
+
+    current = NULL;
+    return exists;
+}
+
+
 void PrintGraph(struct Graph* graph) {
     int vertex;
     for (int index = 0 ; index < graph -> numberOfVertices ; index++) 
@@ -68,14 +98,6 @@ void PrintGraph(struct Graph* graph) {
         }
         current = NULL;
     }
-}
-
-void AddNeighbor(struct Graph* graph, int index, int neighbour) {
-    struct ListNode* node = (struct ListNode*) malloc (sizeof(struct ListNode));
-    node -> neighbour = neighbour;
-    node -> next = ((graph -> listArray)[index]).head;
-    ((graph -> listArray)[index]).head = node;
-    node = NULL; // not necessary
 }
 
 void DeallocateGraph(struct Graph* graph) {

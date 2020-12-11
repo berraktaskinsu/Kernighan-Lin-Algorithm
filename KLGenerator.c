@@ -17,17 +17,12 @@ void RunKLAlgorithm(struct Graph* graph) {
     PrintHeaps(heaps);
     printf("_______________________Algorithm Started\n");
 
-    // ! STEP1: Calculate D Values, build heap
+    // ! STEP1: Initial Iteration - Calculate Initial D Values and Form Initial Heaps
 
-    /**
-     * @brief Create the Initial Heaps
-     * 
-     *  Find d values of each vertex in the sets and add them to the corresponding set
-     * ! Do we really need Set class, won't heap be enough?
-     */
     double dValue;
     int vertex, myCount, yourCount;
-    for (int setNo = 1 ; setNo < 3 ; setNo++) {
+    for (int setNo = 1 ; setNo < 3 ; setNo++) 
+    {
         for (int index = 0 ; index < heaps[setNo - 1] -> numberOfElements ; index++) 
         {
             myCount = 0;
@@ -37,7 +32,8 @@ void RunKLAlgorithm(struct Graph* graph) {
             
             while (current != NULL) 
             {
-                if (graph -> listArray[current -> neighbour - 1].set == setNo) {
+                if (graph -> listArray[current -> neighbour - 1].set == setNo) 
+                {
                     myCount++;
                 } 
                 else
@@ -54,8 +50,53 @@ void RunKLAlgorithm(struct Graph* graph) {
     BuildHeap(heaps[0]);
     BuildHeap(heaps[1]);
     PrintHeaps(heaps);
+    int gmax;
+    struct HeapArrayElement* maxA;
+    struct HeapArrayElement* maxB;
+    int vertexA, vertexB, dValueA, dValueB, gain;
+    int minimumNumberOfElements = (int) fmin((double) heaps[0] -> numberOfElements, (double) heaps[1] -> numberOfElements);
 
+    int* verticesA = (int*) malloc(minimumNumberOfElements * sizeof(int));
+    int* verticesB = (int*) malloc(minimumNumberOfElements * sizeof(int));
+    int* gains = (int*) malloc(minimumNumberOfElements * sizeof(int));
+    for (int index = 0 ; index < minimumNumberOfElements ; index++) 
+    {
+        maxA = ExtractMax(heaps[0]);
+        vertexA = maxA -> vertex;
+        dValueA = maxA -> dValue;
+        
+        maxB = ExtractMax(heaps[1]);
+        vertexB = maxB -> vertex;
+        dValueB = maxB -> dValue;
+
+        free(maxA);
+        free(maxB);
+        maxA = NULL;
+        maxB = NULL;
+
+        gain = dValueA + dValueB;
+        if (EdgeExists(graph, vertexA, vertexB)) 
+        {
+            gain -= 2;
+        }
+        verticesA[index] = vertexA;
+        verticesB[index] = vertexB;
+        gains[index] = gain;
+
+        // UPDATE D VALUES
+        
+    }
+    // find gmax and k
     
+    free(verticesA);
+    free(verticesB);
+    free(gains);
+    verticesA = NULL;
+    verticesB = NULL;
+    gains = NULL;
+
+// repeat until gmax <= 0
+// Note: find d values again how?
 
 
     printf("_______________________End\n");
