@@ -87,7 +87,9 @@ void RunKLAlgorithm(struct Graph* graph) {
             if (EdgeExists(graph, vertexA, vertexB)) 
             {
                 gain -= 2;
+                
             }
+            printf("VA:%d VB:%d DA:%d DB:%d G:%d/n", vertexA, vertexB, dValueA, dValueB, gain);
             verticesA[index] = vertexA;
             verticesB[index] = vertexB;
             gains[index] = gain;
@@ -101,11 +103,11 @@ void RunKLAlgorithm(struct Graph* graph) {
                 if (indexOfNeighbour != -1) {
                     if (graph -> listArray[currentA -> neighbour - 1].set == 1) 
                     {
-                        ChangeKeyByValue(heaps[0], indexOfNeighbour, 1);
+                        ChangeKeyByValue(heaps[0], indexOfNeighbour, 2);
                     } 
                     else if (graph -> listArray[currentA -> neighbour - 1].set == 2)
                     {
-                        ChangeKeyByValue(heaps[0], indexOfNeighbour, -1);
+                        ChangeKeyByValue(heaps[0], indexOfNeighbour, -2);
                     }
                 }
                 currentA = currentA -> next;
@@ -119,11 +121,11 @@ void RunKLAlgorithm(struct Graph* graph) {
                 if (indexOfNeighbour != -1) {
                     if (graph -> listArray[currentB -> neighbour - 1].set == 1) 
                     {
-                        ChangeKeyByValue(heaps[1], indexOfNeighbour, -1);
+                        ChangeKeyByValue(heaps[1], indexOfNeighbour, -2);
                     } 
                     else if (graph -> listArray[currentB -> neighbour - 1].set == 2)
                     {
-                        ChangeKeyByValue(heaps[1], indexOfNeighbour, 1);
+                        ChangeKeyByValue(heaps[1], indexOfNeighbour, 2);
                     }
                 }
                 currentB = currentB -> next;
@@ -133,6 +135,11 @@ void RunKLAlgorithm(struct Graph* graph) {
         }
         // find gmax and k
         int k = 0;
+        printf("FINDING GMAX AND K\nGains: ");
+        for (int i = 0 ; i < minimumNumberOfElements ; i ++) {
+            printf("%d ",gains[i]);
+        }
+        printf("\n");
         gmax = gains[0];
         int gUntilNow = gmax;
         for (int index = 1 ; index < minimumNumberOfElements ; index++) 
