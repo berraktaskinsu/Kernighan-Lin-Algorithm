@@ -21,12 +21,23 @@ struct Heap {
 
 struct Heap* InitializeHeap(int capacity);
 
-void HeapInsert(struct Heap* heap, int vertex, double dValue);
+void AddElementToHeapSet(struct Heap* heap, int vertex);
+
+// ! NOT NECESSARY
+//void HeapInsert(struct Heap* heap, int vertex, double dValue);
+
+// ! INPUT: Vertex or Index?
+//void HeapDelete(struct Heap* heap, int vertex);
+
+// TODO: Implement
+void Heapify(struct Heap* heap, int index);
+
+// TODO: Implement
+void BuildHeap(struct Heap* heap);
 
 // TODO: Implement
 struct HeapArrayElement* ExtractMax(struct Heap* heap);
 
-// TODO: Implement
 void PrintHeap(struct Heap* heap);
 
 void DeallocateHeap(struct Heap* heap);

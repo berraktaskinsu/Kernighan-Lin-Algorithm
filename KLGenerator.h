@@ -16,17 +16,19 @@ void RunKLAlgorithm(struct Graph* graph);
 
 struct Graph* GenerateGraphFromFile(const char* fileName);
 
-struct Set** BuildSetsFromGraph(struct Graph* graph);
+//struct Set** BuildSetsFromGraph(struct Graph* graph);
 
-void PrintSets(struct Set** sets);
+struct Heap** BuildHeapSetsFromGraph(struct Graph* graph);
+
+//void PrintSets(struct Set** sets);
 
 void PrintHeaps(struct Heap** heaps);
 
 void DeleteGraph(struct Graph* graph);
 
-void DeleteSets(struct Set** sets);
+//void DeleteSets(struct Set** sets);
 
-void DeleteSet(struct Set* set);
+//void DeleteSet(struct Set* set);
 
 void DeleteHeaps(struct Heap** heaps);
 

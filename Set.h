@@ -4,7 +4,7 @@
 
 #ifndef __SET_H__
 #define __SET_H__
-
+/*
 struct SetElement {
     int vertex;
 };
@@ -26,5 +26,5 @@ void SwitchVertices(struct Set** sets, int vertex1, int vertex2);
 void PrintSet(struct Set* set);
 
 void DeallocateSet(struct Set* set);
-
+*/
 #endif

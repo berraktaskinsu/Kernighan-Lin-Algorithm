@@ -15,7 +15,14 @@ struct Heap* InitializeHeap(int capacity) {
     return heap;
 }
 
-void HeapInsert(struct Heap* heap, int vertex, double dValue) {
+void AddElementToHeapSet(struct Heap* heap, int vertex) {
+    heap -> heapArray[heap -> numberOfElements].isValid = true;
+    heap -> heapArray[heap -> numberOfElements].dValue = 0;
+    heap -> heapArray[heap -> numberOfElements].vertex = vertex;
+    heap -> numberOfElements ++;
+}
+
+/*void HeapInsert(struct Heap* heap, int vertex, double dValue) {
     int index = heap -> numberOfElements;
     heap -> heapArray[index].isValid = true;
     while (index > 0 && heap -> heapArray[(int) floor(((double) index - 1) / 2.0)].dValue < dValue) 
@@ -24,13 +31,44 @@ void HeapInsert(struct Heap* heap, int vertex, double dValue) {
         heap -> heapArray[index].dValue = heap -> heapArray[(int) floor(((double) index - 1) / 2.0)].dValue;
         heap -> heapArray[index].vertex = heap -> heapArray[(int) floor(((double) index - 1) / 2.0)].vertex;
         index = (int) floor(((double) index - 1) / 2.0);
-        
     }
     heap -> heapArray[index].dValue = dValue;
     heap -> heapArray[index].vertex = vertex;
     heap -> numberOfElements++;
+}*/
+
+//void HeapDelete(struct Heap* heap, int vertex) {}
+
+void Heapify(struct Heap* heap, int index) {
+    int n = heap -> numberOfElements;
+    int indexOfLargest = index;
+    int indexOfLeftChild = 2 * (index + 1) - 1;
+    int indexOfRightChild = 2 * (index + 1);
+    if (indexOfLeftChild < n && heap -> heapArray[indexOfLeftChild].dValue > heap -> heapArray[index].dValue) {
+        indexOfLargest = indexOfLeftChild;
+    }
+    if (indexOfRightChild < n && heap -> heapArray[indexOfRightChild].dValue > heap -> heapArray[indexOfLargest].dValue) {
+        indexOfLargest = indexOfRightChild;
+    }
+    if (indexOfLargest != index) {
+        int tempDValue = heap -> heapArray[index].dValue;
+        int tempVertex = heap -> heapArray[index].vertex;
+        heap -> heapArray[index].dValue = heap -> heapArray[indexOfLargest].dValue;
+        heap -> heapArray[index].vertex = heap -> heapArray[indexOfLargest].vertex;
+        heap -> heapArray[indexOfLargest].dValue = tempDValue;
+        heap -> heapArray[indexOfLargest].vertex = tempVertex;
+        Heapify(heap, indexOfLargest);
+    }
 }
 
+void BuildHeap(struct Heap* heap) {
+    int n = heap -> numberOfElements;
+    for (int index = floor((double) n / 2.0) - 1 ; index >= 0 ; index--) {
+        Heapify(heap, index);
+    }
+}
+
+// TODO: Implement
 struct HeapArrayElement* ExtractMax(struct Heap* heap) {
     struct HeapArrayElement* heapArrayElement = &(heap -> heapArray)[0];
     return heapArrayElement;

@@ -5,12 +5,14 @@
 
 #include "KLGenerator.h"
 
-#define FILE_NAME "input_graph.mtx"
+#define FILE1_NAME "input_graph.mtx"
+#define FILE2_NAME "Erdos02.mtx"
+#define FILE3_NAME "com-DBLP.mtx"
 
 
 int main() {
 
-    struct Graph* graph = GenerateGraphFromFile(FILE_NAME);
+    struct Graph* graph = GenerateGraphFromFile(FILE2_NAME);
     if (graph == NULL) 
     {
         perror("Failed to generate graph.");

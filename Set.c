@@ -1,5 +1,5 @@
 #include "Set.h"
-
+/*
 struct Set* InitializeSet(int numberOfElements) {
     struct Set* set = (struct Set*) malloc(sizeof(struct Set));
     set -> numberOfElements = numberOfElements;
@@ -37,4 +37,4 @@ void DeallocateSet(struct Set* set) {
     free(set -> setArray);
     set -> setArray = NULL;
     free(set);
-}
+}*/
