@@ -8,11 +8,12 @@
 #define FILE1_NAME "input_graph.mtx"
 #define FILE2_NAME "Erdos02.mtx"
 #define FILE3_NAME "com-DBLP.mtx"
+#define FILE4_NAME "test.mtx"
 
 
 int main() {
 
-    struct Graph* graph = GenerateGraphFromFile(FILE2_NAME);
+    struct Graph* graph = GenerateGraphFromFile(FILE4_NAME);
     if (graph == NULL) 
     {
         perror("Failed to generate graph.");

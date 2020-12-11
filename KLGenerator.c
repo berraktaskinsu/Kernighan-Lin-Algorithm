@@ -284,6 +284,7 @@ struct Heap** ReBuildHeapSetsFromGraph(struct Graph* graph) {
         int set = graph -> listArray[index].set; // 1 or 2
         AddElementToHeapSet(heapSets[set - 1], index + 1);
     }
+    
     return heapSets;
 }
 
