@@ -9,4 +9,4 @@
 `>> make`\
 `>> valgrind --leak-check=yes -s ./KL`\
 OR 
-`>> valgrind --leak-check=full --show-leak-kinds=all -s ./KL~\
+`>> valgrind --leak-check=full --show-leak-kinds=all -s ./KL`\
