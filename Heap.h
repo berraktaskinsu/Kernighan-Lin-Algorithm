@@ -38,6 +38,14 @@ void BuildHeap(struct Heap* heap);
 // TODO: Implement
 struct HeapArrayElement* ExtractMax(struct Heap* heap);
 
+int FindIndexOfVertex(struct Heap* heap, int vertex);
+
+void ChangeKeyByValue(struct Heap* heap, int index, int increment);
+
+void HeapIncreaseKey(struct Heap* heap, int index, int key);
+
+void HeapDecreaseKey(struct Heap* heap, int index, int key);
+
 void PrintHeap(struct Heap* heap);
 
 void DeallocateHeap(struct Heap* heap);

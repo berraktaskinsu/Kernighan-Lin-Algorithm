@@ -19,6 +19,7 @@ struct Graph* GenerateGraphFromFile(const char* fileName);
 //struct Set** BuildSetsFromGraph(struct Graph* graph);
 
 struct Heap** BuildHeapSetsFromGraph(struct Graph* graph);
+struct Heap** ReBuildHeapSetsFromGraph(struct Graph* graph);
 
 //void PrintSets(struct Set** sets);
 

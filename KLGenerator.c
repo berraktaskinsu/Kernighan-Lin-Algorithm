@@ -13,95 +13,166 @@
 
 void RunKLAlgorithm(struct Graph* graph) {
 
-    struct Heap** heaps = BuildHeapSetsFromGraph(graph);
-    PrintHeaps(heaps);
+    
     printf("_______________________Algorithm Started\n");
 
-    // ! STEP1: Initial Iteration - Calculate Initial D Values and Form Initial Heaps
-
-    double dValue;
-    int vertex, myCount, yourCount;
-    for (int setNo = 1 ; setNo < 3 ; setNo++) 
-    {
-        for (int index = 0 ; index < heaps[setNo - 1] -> numberOfElements ; index++) 
-        {
-            myCount = 0;
-            yourCount = 0;
-            vertex = heaps[setNo - 1] -> heapArray[index].vertex;
-            struct ListNode* current = graph -> listArray[vertex - 1].head;
-            
-            while (current != NULL) 
-            {
-                if (graph -> listArray[current -> neighbour - 1].set == setNo) 
-                {
-                    myCount++;
-                } 
-                else
-                {
-                    yourCount++;
-                }
-                current = current -> next;
-            }
-            dValue = yourCount - myCount;
-            printf("Set No: %d, Vertex: %d, D: %d\n", setNo, vertex, (int)dValue);
-            heaps[setNo - 1] -> heapArray[index].dValue = dValue;
-        }
-    }
-    BuildHeap(heaps[0]);
-    BuildHeap(heaps[1]);
-    PrintHeaps(heaps);
+    int iteration = 0;
     int gmax;
-    struct HeapArrayElement* maxA;
-    struct HeapArrayElement* maxB;
-    int vertexA, vertexB, dValueA, dValueB, gain;
-    int minimumNumberOfElements = (int) fmin((double) heaps[0] -> numberOfElements, (double) heaps[1] -> numberOfElements);
-
-    int* verticesA = (int*) malloc(minimumNumberOfElements * sizeof(int));
-    int* verticesB = (int*) malloc(minimumNumberOfElements * sizeof(int));
-    int* gains = (int*) malloc(minimumNumberOfElements * sizeof(int));
-    for (int index = 0 ; index < minimumNumberOfElements ; index++) 
-    {
-        maxA = ExtractMax(heaps[0]);
-        vertexA = maxA -> vertex;
-        dValueA = maxA -> dValue;
-        
-        maxB = ExtractMax(heaps[1]);
-        vertexB = maxB -> vertex;
-        dValueB = maxB -> dValue;
-
-        free(maxA);
-        free(maxB);
-        maxA = NULL;
-        maxB = NULL;
-
-        gain = dValueA + dValueB;
-        if (EdgeExists(graph, vertexA, vertexB)) 
-        {
-            gain -= 2;
+    do {
+        struct Heap** heaps;
+        if (iteration == 0) {
+            heaps = BuildHeapSetsFromGraph(graph);
         }
-        verticesA[index] = vertexA;
-        verticesB[index] = vertexB;
-        gains[index] = gain;
+        else {
+            heaps = ReBuildHeapSetsFromGraph(graph);
+        }
+        iteration++;
+        PrintHeaps(heaps);
+        gmax = 0;
+        double dValue;
+        int vertex, myCount, yourCount;
+        for (int setNo = 1 ; setNo < 3 ; setNo++) 
+        {
+            for (int index = 0 ; index < heaps[setNo - 1] -> numberOfElements ; index++) 
+            {
+                myCount = 0;
+                yourCount = 0;
+                vertex = heaps[setNo - 1] -> heapArray[index].vertex;
+                struct ListNode* current = graph -> listArray[vertex - 1].head;
+                
+                while (current != NULL) 
+                {
+                    if (graph -> listArray[current -> neighbour - 1].set == setNo) 
+                    {
+                        myCount++;
+                    } 
+                    else
+                    {
+                        yourCount++;
+                    }
+                    current = current -> next;
+                }
+                dValue = yourCount - myCount;
+                printf("Set No: %d, Vertex: %d, D: %d\n", setNo, vertex, (int)dValue);
+                heaps[setNo - 1] -> heapArray[index].dValue = dValue;
+            }
+        }
+        BuildHeap(heaps[0]);
+        BuildHeap(heaps[1]);
+        PrintHeaps(heaps);
+        struct HeapArrayElement* maxA;
+        struct HeapArrayElement* maxB;
+        int vertexA, vertexB, dValueA, dValueB, gain;
+        int minimumNumberOfElements = (int) fmin((double) heaps[0] -> numberOfElements, (double) heaps[1] -> numberOfElements);
 
-        // UPDATE D VALUES
-        
+        int* verticesA = (int*) malloc(minimumNumberOfElements * sizeof(int));
+        int* verticesB = (int*) malloc(minimumNumberOfElements * sizeof(int));
+        int* gains = (int*) malloc(minimumNumberOfElements * sizeof(int));
+        for (int index = 0 ; index < minimumNumberOfElements ; index++) 
+        {
+            maxA = ExtractMax(heaps[0]);
+            vertexA = maxA -> vertex;
+            dValueA = maxA -> dValue;
+            
+            maxB = ExtractMax(heaps[1]);
+            vertexB = maxB -> vertex;
+            dValueB = maxB -> dValue;
+
+            free(maxA);
+            free(maxB);
+            maxA = NULL;
+            maxB = NULL;
+
+            gain = dValueA + dValueB;
+            if (EdgeExists(graph, vertexA, vertexB)) 
+            {
+                gain -= 2;
+            }
+            verticesA[index] = vertexA;
+            verticesB[index] = vertexB;
+            gains[index] = gain;
+
+            // UPDATE D VALUES
+            // for all neighbours of a and b, dvalue-= 2 or dvalue += 2
+            struct ListNode* currentA = graph -> listArray[vertexA - 1].head;
+            while (currentA != NULL) {
+                
+                int indexOfNeighbour = FindIndexOfVertex(heaps[0], currentA -> neighbour);
+                if (indexOfNeighbour != -1) {
+                    if (graph -> listArray[currentA -> neighbour - 1].set == 1) 
+                    {
+                        ChangeKeyByValue(heaps[0], indexOfNeighbour, 1);
+                    } 
+                    else if (graph -> listArray[currentA -> neighbour - 1].set == 2)
+                    {
+                        ChangeKeyByValue(heaps[0], indexOfNeighbour, -1);
+                    }
+                }
+                currentA = currentA -> next;
+            }
+            currentA = NULL;
+
+            struct ListNode* currentB = graph -> listArray[vertexB - 1].head;
+            while (currentB != NULL) {
+                
+                int indexOfNeighbour = FindIndexOfVertex(heaps[1], currentB -> neighbour);
+                if (indexOfNeighbour != -1) {
+                    if (graph -> listArray[currentB -> neighbour - 1].set == 1) 
+                    {
+                        ChangeKeyByValue(heaps[1], indexOfNeighbour, -1);
+                    } 
+                    else if (graph -> listArray[currentB -> neighbour - 1].set == 2)
+                    {
+                        ChangeKeyByValue(heaps[1], indexOfNeighbour, 1);
+                    }
+                }
+                currentB = currentB -> next;
+            }
+            currentB = NULL;
+
+        }
+        // find gmax and k
+        int k = 0;
+        gmax = gains[0];
+        int gUntilNow = gmax;
+        for (int index = 1 ; index < minimumNumberOfElements ; index++) 
+        {
+            gUntilNow += gains[index];
+            if (gUntilNow > gmax) {
+                k = index;
+                gmax = gUntilNow;
+            }
+        }
+        printf("Iteration 1- k: %d - gmax: %d\n", k, gmax);
+
+        if (gmax > 0) {
+            printf("********************************EXCHANGE***********************************\n");
+            
+            // Switch the subsets (on graph)
+            int changedA, changedB;
+            for (int index = 0 ; index < minimumNumberOfElements ; index++) 
+            {
+                
+                changedA = verticesA[index];
+                changedB = verticesB[index];
+                
+                graph -> listArray[changedA - 1].set = 2;
+                graph -> listArray[changedB - 1].set = 1;
+                
+            }
+        }
+
+        free(verticesA);
+        free(verticesB);
+        free(gains);
+        verticesA = NULL;
+        verticesB = NULL;
+        gains = NULL;
+        DeleteHeaps(heaps);
+        heaps = NULL;
     }
-    // find gmax and k
-    
-    free(verticesA);
-    free(verticesB);
-    free(gains);
-    verticesA = NULL;
-    verticesB = NULL;
-    gains = NULL;
-
-// repeat until gmax <= 0
-// Note: find d values again how?
-
-
+    while (gmax > 0);
     printf("_______________________End\n");
-    DeleteHeaps(heaps);
-    heaps = NULL;
 }
 
 struct Graph* GenerateGraphFromFile(const char* fileName) {
@@ -195,6 +266,23 @@ struct Heap** BuildHeapSetsFromGraph(struct Graph* graph) {
     for ( ; index < numberOfVertices1 + numberOfVertices2 ; index++) {
         AddElementToHeapSet(heapSets[1], index + 1);
         graph -> listArray[index].set = 2;
+    }
+    return heapSets;
+}
+
+struct Heap** ReBuildHeapSetsFromGraph(struct Graph* graph) {
+    int numberOfVertices1 = ceil(((double) (graph -> numberOfVertices)) / 2.0);
+    int numberOfVertices2 = floor(((double) (graph -> numberOfVertices)) / 2.0);
+    //int capacity1 = FindNearestPowerOfTwo(numberOfVertices1);
+    //int capacity2 = FindNearestPowerOfTwo(numberOfVertices2);
+    struct Heap** heapSets = malloc(2 * sizeof(struct Heap*));
+    heapSets[0] = InitializeHeap(numberOfVertices1);
+    heapSets[1] = InitializeHeap(numberOfVertices2);
+
+    for (int index = 0 ; index < graph -> numberOfVertices ; index++) 
+    {
+        int set = graph -> listArray[index].set; // 1 or 2
+        AddElementToHeapSet(heapSets[set - 1], index + 1);
     }
     return heapSets;
 }
