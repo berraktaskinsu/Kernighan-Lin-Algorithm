@@ -2,7 +2,7 @@
 
 ### Notes:
 
-####-> Running valgrind for locating memory leak checks:
+#### Running valgrind for locating memory leak checks:
 - STEP 1: Download Ubuntu WSL from Microsoft Store.
 - STEP 2: Install gcc and make commands (Just type make and it will display installation commands)
 - STEP 3: Compile the program and run the executable with valgrind:\
