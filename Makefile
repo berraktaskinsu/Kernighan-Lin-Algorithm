@@ -3,8 +3,8 @@ CFLAGS=-g -Wall
 
 all: KL
 
-KL: Main.o KLGenerator.o Graph.o Heap.o Set.o Helper.o
-	$(CC) $(CFLAGS) -o KL Main.o KLGenerator.o Graph.o Heap.o Set.o Helper.o -lm
+KL: Main.o KLGenerator.o Graph.o Heap.o Helper.o
+	$(CC) $(CFLAGS) -o KL Main.o KLGenerator.o Graph.o Heap.o Helper.o -lm
 
 Main.o: Main.c KLGenerator.h
 	$(CC) $(CFLAGS) -c Main.c
@@ -17,9 +17,6 @@ Graph.o: Graph.c Graph.h Helper.h
 
 Heap.o: Heap.c Heap.h Helper.h
 	$(CC) $(CFLAGS) -c Heap.c
-
-Set.o: Set.c Set.h Helper.h
-	$(CC) $(CFLAGS) -c Set.c
 
 Helper.o: Helper.c Helper.h
 	$(CC) $(CFLAGS) -c Helper.c

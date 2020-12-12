@@ -97,7 +97,7 @@ void RunKLAlgorithm(struct Graph* graph) {
 
             if (heaps[0] -> numberOfElements == 0 || heaps[1] -> numberOfElements == 0) {
                 // DO NOT EXTRACT OR UPDATE FURTHER
-                printf("Heaps are empty\n");
+                // printf("Heaps are empty\n");
                 break;
             }
 
