@@ -7,12 +7,13 @@
 
 #include "Graph.h"
 #include "Heap.h"
-#include "Set.h"
 
 #ifndef __KLGENERATOR_H__
 #define __KLGENERATOR_H__
 
-void RunKLAlgorithm(struct Graph* graph);
+void RunKLAlgorithmA(struct Graph* graph);
+
+void RunKLAlgorithmB(struct Graph* graph);
 
 struct Graph* GenerateGraphFromFile(const char* fileName);
 

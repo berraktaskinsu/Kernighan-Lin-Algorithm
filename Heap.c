@@ -63,6 +63,26 @@ struct HeapArrayElement* ExtractMax(struct Heap* heap) {
     return maxElement;
 }
 
+struct HeapArrayElement* ExtractMax2(struct Heap* heap) {
+    struct HeapArrayElement* maxElement = &heap -> heapArray[0];
+    struct HeapArrayElement* current;
+    for (int index = 1 ; index < heap -> numberOfElements ; index++) {
+        current = &heap -> heapArray[index];
+        if (current -> dValue > maxElement -> dValue) {
+            maxElement = current;
+        }
+    }
+    current = NULL;
+    struct HeapArrayElement* maxReturned = (struct HeapArrayElement*) malloc(sizeof(struct HeapArrayElement));
+    maxReturned -> dValue = maxElement -> dValue;
+    maxReturned -> vertex = maxElement -> vertex;
+    maxElement -> dValue = heap -> heapArray[heap -> numberOfElements - 1].dValue;
+    maxElement -> vertex = heap -> heapArray[heap -> numberOfElements - 1].vertex;
+    heap -> heapArray[heap -> numberOfElements - 1].isValid = false;
+    heap -> numberOfElements--;
+    return maxReturned;
+}
+
 int FindIndexOfVertex(struct Heap* heap, int vertex) {
     
     for (int index = 0 ; index < heap -> numberOfElements ; index++) {
@@ -85,6 +105,11 @@ void ChangeKeyByValue(struct Heap* heap, int index, int increment) {
         HeapIncreaseKey(heap, index, heap -> heapArray[index].dValue + increment);
     }
     
+}
+
+void ChangeKeyByValue2(struct Heap* heap, int index, int increment) {
+    int key = heap -> heapArray[index].dValue + increment;
+    heap -> heapArray[index].dValue = key;
 }
 
 void HeapIncreaseKey(struct Heap* heap, int index, int key) {

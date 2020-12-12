@@ -29,9 +29,13 @@ void BuildHeap(struct Heap* heap);
 
 struct HeapArrayElement* ExtractMax(struct Heap* heap);
 
+struct HeapArrayElement* ExtractMax2(struct Heap* heap);
+
 int FindIndexOfVertex(struct Heap* heap, int vertex);
 
 void ChangeKeyByValue(struct Heap* heap, int index, int increment);
+
+void ChangeKeyByValue2(struct Heap* heap, int index, int increment);
 
 void HeapIncreaseKey(struct Heap* heap, int index, int key);
 

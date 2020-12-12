@@ -73,6 +73,40 @@ bool EdgeExists(struct Graph* graph, int vertex1, int vertex2) {
     return false;
 }
 
+int CalculateCutSize(struct Graph* graph) {
+    int cutSize = 0;
+    int numberOfVertices = graph -> numberOfVertices;
+
+    // initialize visited
+    bool* visited = (bool*) malloc(numberOfVertices*sizeof(bool));
+    for (int i = 0 ; i < numberOfVertices ; i++)
+        visited[i] = false;
+    // algorithm
+    int setNo, vertex, neighbourVertex, neighbourSetNo;
+    bool neighbourWasVisited;
+    struct ListNode* currentNeighbour;
+    for (int index = 0 ; index < numberOfVertices ; index ++) {
+        vertex = index + 1;
+        setNo = graph -> listArray[index].set;
+        
+        currentNeighbour = graph -> listArray[index].head;
+        while (currentNeighbour != NULL) {
+            neighbourVertex = currentNeighbour -> neighbour;
+            neighbourSetNo = graph -> listArray[neighbourVertex - 1].set;
+            neighbourWasVisited = visited[neighbourVertex - 1];
+            if (!neighbourWasVisited && setNo != neighbourSetNo) {
+                cutSize++;
+            }
+            currentNeighbour = currentNeighbour -> next;
+        }
+        visited[index] = true;
+    }
+
+    // deallocate & delete visited
+    free(visited);
+    visited = NULL;
+    return cutSize;
+}
 
 void PrintGraph(struct Graph* graph) {
     int vertex;
