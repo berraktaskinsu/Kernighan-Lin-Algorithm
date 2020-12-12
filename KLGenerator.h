@@ -4,6 +4,7 @@
 #include <ctype.h>
 #include <math.h>
 #include <limits.h>
+#include <time.h>
 
 #include "Graph.h"
 #include "Heap.h"

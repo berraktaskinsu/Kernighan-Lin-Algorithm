@@ -30,11 +30,10 @@ int main(int argc, char **argv) {
         perror("Failed to generate graph.");
         exit(EXIT_FAILURE);
     }
-    PrintGraph(graph);
-    initialCutSize = CalculateCutSize(graph);
-
-    double elapsedTime;
+    
     //PrintGraph(graph);
+    initialCutSize = CalculateCutSize(graph);
+    double elapsedTime;
     if (strcmp(option, "a") == 0)
         elapsedTime = RunKLAlgorithmA(graph);
     else if (strcmp(option, "b") == 0)
@@ -45,7 +44,7 @@ int main(int argc, char **argv) {
         exit(EXIT_FAILURE);
     }
     finalCutSize = CalculateCutSize(graph);
-    printf("\nInitial Cut Size: %d, Final Cut Size: %d\n", initialCutSize, finalCutSize);
+    printf("\nInitial Cut Size: %d, Final Cut Size: %d, Elapsed Time %f seconds\n", initialCutSize, finalCutSize, elapsedTime);
     
     DeleteGraph(graph);
     return 0;

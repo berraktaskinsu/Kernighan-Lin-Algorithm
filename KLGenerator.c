@@ -15,13 +15,13 @@
 double RunKLAlgorithmA(struct Graph* graph) {
 
     printf("_____________________________________________KL Algorithm A_________________________________________________-\n");
-
+    clock_t timer = clock();
+    
     int iteration = 0;
     int gmax;
     do {
         struct Heap** heaps;
         heaps = BuildHeapSetsFromGraph(graph);
-        
         
         iteration++;
         //PrintHeaps(heaps);
@@ -210,14 +210,17 @@ double RunKLAlgorithmA(struct Graph* graph) {
         heaps = NULL;
     }
     while (gmax > 0);
+    timer = clock() - timer;
+    double elapsedTime = ((double)timer) / CLOCKS_PER_SEC;
     printf("_____________________________________________KL Algorithm A_________________________________________________-\n");
-    return 0.0;
+    return elapsedTime;
 }
 
 double RunKLAlgorithmB(struct Graph* graph) {
 
     // ! Treat heaps as basic sets
     printf("_____________________________________________KL Algorithm B_________________________________________________-\n");
+    clock_t timer = clock();
 
     int iteration = 0;
     int gmax;
@@ -379,8 +382,10 @@ double RunKLAlgorithmB(struct Graph* graph) {
         heaps = NULL;
     }
     while (gmax > 0);
+    timer = clock() - timer;
+    double elapsedTime = ((double)timer) / CLOCKS_PER_SEC;
     printf("_____________________________________________KL Algorithm B_________________________________________________-\n");
-    return 0.0;
+    return elapsedTime;
 }
 
 struct Graph* GenerateGraphFromFile(const char* fileName) {

@@ -13,7 +13,6 @@ struct Graph* InitializeGraph(int numberOfVertices) {
     struct Graph* graph = (struct Graph*) malloc (sizeof(struct Graph));
     graph -> numberOfVertices = numberOfVertices;
     int numberOfVertices1 = ceil(((double) (graph -> numberOfVertices)) / 2.0);
-    int numberOfVertices2 = floor(((double) (graph -> numberOfVertices)) / 2.0);
 
     // Allocate space for listArray (numberOfVertices * size(List)) = (numberOfVertices * size(Node*))
     graph -> listArray = (struct List*) malloc (numberOfVertices * sizeof(struct List));
@@ -66,11 +65,9 @@ bool EdgeExists(struct Graph* graph, int vertex1, int vertex2) {
         perror("Vertex does not exist in graph");
         exit(EXIT_FAILURE);
     }
-    bool exists = false;
     struct ListNode* current = graph -> listArray[vertex1 - 1].head;
     while (current != NULL) 
     {
-        //printf("Source: %d, Dest: %d, NEIGHBOR: %d\n", vertex1, vertex2, current -> neighbour);
         if (current -> neighbour == vertex2) {
             return true;
         }
@@ -89,11 +86,10 @@ int CalculateCutSize(struct Graph* graph) {
     for (int i = 0 ; i < numberOfVertices ; i++)
         visited[i] = false;
     // algorithm
-    int setNo, vertex, neighbourVertex, neighbourSetNo;
+    int setNo, neighbourVertex, neighbourSetNo;
     bool neighbourWasVisited;
     struct ListNode* currentNeighbour;
     for (int index = 0 ; index < numberOfVertices ; index ++) {
-        vertex = index + 1;
         setNo = graph -> listArray[index].set;
         
         currentNeighbour = graph -> listArray[index].head;
