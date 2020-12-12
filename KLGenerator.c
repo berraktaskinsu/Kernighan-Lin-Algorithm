@@ -10,9 +10,9 @@
  * @return true 
  * @return false 
  */
-extern int initialCutSize;
 
-void RunKLAlgorithmA(struct Graph* graph) {
+
+double RunKLAlgorithmA(struct Graph* graph) {
 
     printf("_____________________________________________KL Algorithm A_________________________________________________-\n");
 
@@ -20,13 +20,9 @@ void RunKLAlgorithmA(struct Graph* graph) {
     int gmax;
     do {
         struct Heap** heaps;
-        if (iteration == 0) {
-            heaps = BuildHeapSetsFromGraph(graph);
-            initialCutSize = CalculateCutSize(graph);
-        }
-        else {
-            heaps = ReBuildHeapSetsFromGraph(graph);
-        }
+        heaps = BuildHeapSetsFromGraph(graph);
+        
+        
         iteration++;
         //PrintHeaps(heaps);
         double dValue;
@@ -203,7 +199,6 @@ void RunKLAlgorithmA(struct Graph* graph) {
                 
             }
         }
-        
 
         free(verticesA);
         free(verticesB);
@@ -216,9 +211,10 @@ void RunKLAlgorithmA(struct Graph* graph) {
     }
     while (gmax > 0);
     printf("_____________________________________________KL Algorithm A_________________________________________________-\n");
+    return 0.0;
 }
 
-void RunKLAlgorithmB(struct Graph* graph) {
+double RunKLAlgorithmB(struct Graph* graph) {
 
     // ! Treat heaps as basic sets
     printf("_____________________________________________KL Algorithm B_________________________________________________-\n");
@@ -227,15 +223,8 @@ void RunKLAlgorithmB(struct Graph* graph) {
     int gmax;
     do {
         struct Heap** heaps;
-        if (iteration == 0) {
-            heaps = BuildHeapSetsFromGraph(graph);
-            initialCutSize = CalculateCutSize(graph);
-        }
-        else {
-            heaps = ReBuildHeapSetsFromGraph(graph);
-        }
+        heaps = BuildHeapSetsFromGraph(graph);
         iteration++;
-        //PrintHeaps(heaps);
         double dValue;
         int vertex, myCount, yourCount;
         for (int setNo = 1 ; setNo < 3 ; setNo++) 
@@ -260,16 +249,9 @@ void RunKLAlgorithmB(struct Graph* graph) {
                     current = current -> next;
                 }
                 dValue = yourCount - myCount;
-                //printf("Set No: %d, Vertex: %d, D: %d\n", setNo, vertex, (int)dValue);
                 heaps[setNo - 1] -> heapArray[index].dValue = dValue;
             }
         }
-        /*
-        BuildHeap(heaps[0]);
-        BuildHeap(heaps[1]);
-        */
-        //printf("\nBefore Extraction:\n");
-        //PrintHeaps(heaps);
         struct HeapArrayElement* maxA;
         struct HeapArrayElement* maxB;
         int vertexA, vertexB, dValueA, dValueB, gain;
@@ -282,12 +264,10 @@ void RunKLAlgorithmB(struct Graph* graph) {
         {
             // ! Do not use ExtractMax
             maxA = ExtractMax2(heaps[0]);
-            //maxA = ExtractMax(heaps[0]);
             vertexA = maxA -> vertex;
             dValueA = maxA -> dValue;
             
             maxB = ExtractMax2(heaps[1]);
-            //maxB = ExtractMax(heaps[1]);
             vertexB = maxB -> vertex;
             dValueB = maxB -> dValue;
 
@@ -302,15 +282,11 @@ void RunKLAlgorithmB(struct Graph* graph) {
                 gain -= 2;
                 
             }
-            //printf("\nAfter Extraction:\nVA:%d VB:%d DA:%d DB:%d G:%d\nUpdating D Values - Before:\n", vertexA, vertexB, dValueA, dValueB, gain);
-            //PrintHeaps(heaps);
             verticesA[index] = vertexA;
             verticesB[index] = vertexB;
             gains[index] = gain;
 
             if (heaps[0] -> numberOfElements == 0 || heaps[1] -> numberOfElements == 0) {
-                // DO NOT EXTRACT OR UPDATE FURTHER
-                // printf("Heaps are empty\n");
                 break;
             }
 
@@ -351,9 +327,7 @@ void RunKLAlgorithmB(struct Graph* graph) {
                     // neighbour is in heaps[0]
                     neighbourIndex = FindIndexOfVertex(heaps[0], neighbourVertex);
                     if (neighbourIndex != -1) {
-                        //printf("**Index of vertex %d in heaps %d is %d\n", neighbourVertex, 0, neighbourIndex);
                         ChangeKeyByValue2(heaps[0], neighbourIndex, -2);
-                        //ChangeKeyByValue(heaps[0], neighbourIndex, -2);
                     }
                     
                 }
@@ -362,34 +336,13 @@ void RunKLAlgorithmB(struct Graph* graph) {
                     // same set - neighbour is in heaps[1]
                     neighbourIndex = FindIndexOfVertex(heaps[1], neighbourVertex);
                     if (neighbourIndex != -1) {
-                        //printf("**Index of vertex %d in heaps %d is %d\n", neighbourVertex, 1, neighbourIndex);
                         ChangeKeyByValue2(heaps[1], neighbourIndex, 2);
-                        //ChangeKeyByValue(heaps[1], neighbourIndex, 2);
                     }
                 }
                 currentB = currentB -> next;
             }
+        }
 
-            //printf("\nUpdating D Values - After:\n");
-            //PrintHeaps(heaps);
-        }
-        // find gmax and k
-        /*
-        printf("\nVertices A: ");
-        for (int i = 0 ; i < minimumNumberOfElements ; i ++) {
-            printf("%d ",verticesA[i]);
-        }
-        printf("\n");
-        printf("Vertices B: ");
-        for (int i = 0 ; i < minimumNumberOfElements ; i ++) {
-            printf("%d ",verticesB[i]);
-        }
-        printf("\n");
-        printf("Gains: ");
-        for (int i = 0 ; i < minimumNumberOfElements ; i ++) {
-            printf("%d ",gains[i]);
-        }
-        printf("\n");*/
         int k = 0;
         gmax = gains[0];
         int gUntilNow = gmax;
@@ -404,23 +357,18 @@ void RunKLAlgorithmB(struct Graph* graph) {
         printf("Iteration %d- k: %d - gmax: %d\n", iteration, k, gmax);
 
         if (gmax > 0) {
-            //printf("********************************EXCHANGE***********************************\n");
-            
             // Switch the subsets (on graph)
             int changedA, changedB;
             for (int index = 0 ; index <= k ; index++) 
             {
-                
                 changedA = verticesA[index];
                 changedB = verticesB[index];
                 
                 graph -> listArray[changedA - 1].set = 2;
                 graph -> listArray[changedB - 1].set = 1;
-                
             }
         }
         
-
         free(verticesA);
         free(verticesB);
         free(gains);
@@ -432,6 +380,7 @@ void RunKLAlgorithmB(struct Graph* graph) {
     }
     while (gmax > 0);
     printf("_____________________________________________KL Algorithm B_________________________________________________-\n");
+    return 0.0;
 }
 
 struct Graph* GenerateGraphFromFile(const char* fileName) {
@@ -486,7 +435,7 @@ struct Graph* GenerateGraphFromFile(const char* fileName) {
     return graph;
 }
 
-struct Heap** BuildHeapSetsFromGraph(struct Graph* graph) {
+/*struct Heap** BuildHeapSetsFromGraph(struct Graph* graph) {
     int numberOfVertices1 = ceil(((double) (graph -> numberOfVertices)) / 2.0);
     int numberOfVertices2 = floor(((double) (graph -> numberOfVertices)) / 2.0);
     //int capacity1 = FindNearestPowerOfTwo(numberOfVertices1);
@@ -505,9 +454,10 @@ struct Heap** BuildHeapSetsFromGraph(struct Graph* graph) {
         graph -> listArray[index].set = 2;
     }
     return heapSets;
-}
+}*/
 
-struct Heap** ReBuildHeapSetsFromGraph(struct Graph* graph) {
+
+struct Heap** BuildHeapSetsFromGraph(struct Graph* graph) {
     int numberOfVertices1 = ceil(((double) (graph -> numberOfVertices)) / 2.0);
     int numberOfVertices2 = floor(((double) (graph -> numberOfVertices)) / 2.0);
     //int capacity1 = FindNearestPowerOfTwo(numberOfVertices1);
@@ -519,6 +469,7 @@ struct Heap** ReBuildHeapSetsFromGraph(struct Graph* graph) {
     for (int index = 0 ; index < graph -> numberOfVertices ; index++) 
     {
         int set = graph -> listArray[index].set; // 1 or 2
+        //printf("Set: %d\n", set);
         AddElementToHeapSet(heapSets[set - 1], index + 1);
     }
     

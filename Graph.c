@@ -12,6 +12,8 @@ struct Graph* InitializeGraph(int numberOfVertices) {
     // Allocate space for graph (size(int) + size(List*))
     struct Graph* graph = (struct Graph*) malloc (sizeof(struct Graph));
     graph -> numberOfVertices = numberOfVertices;
+    int numberOfVertices1 = ceil(((double) (graph -> numberOfVertices)) / 2.0);
+    int numberOfVertices2 = floor(((double) (graph -> numberOfVertices)) / 2.0);
 
     // Allocate space for listArray (numberOfVertices * size(List)) = (numberOfVertices * size(Node*))
     graph -> listArray = (struct List*) malloc (numberOfVertices * sizeof(struct List));
@@ -19,9 +21,14 @@ struct Graph* InitializeGraph(int numberOfVertices) {
     for (int index = 0 ; index < numberOfVertices ; index++) 
     {
         ((graph -> listArray)[index]).head = NULL;
-        ((graph -> listArray)[index]).set = 0;
+        if (index < numberOfVertices1) {
+            ((graph -> listArray)[index]).set = 1;
+        }
+        else 
+        {
+            ((graph -> listArray)[index]).set = 2;
+        }
     }
-
     return graph;
 }
 

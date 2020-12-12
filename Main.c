@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <ctype.h>
+#include <string.h>
 
 #include "KLGenerator.h"
 
@@ -16,24 +17,33 @@ int finalCutSize;
 
 int main(int argc, char **argv) {
     
-    if (argc != 2)
+    if (argc != 3)
     {
         perror("Invalid arguments");
         exit(EXIT_FAILURE);
     }
     char* fileName = argv[1];
+    char* option = argv[2];
     struct Graph* graph = GenerateGraphFromFile(fileName);
     if (graph == NULL) 
     {
         perror("Failed to generate graph.");
         exit(EXIT_FAILURE);
     }
+    PrintGraph(graph);
+    initialCutSize = CalculateCutSize(graph);
+
+    double elapsedTime;
     //PrintGraph(graph);
-    RunKLAlgorithmA(graph);
-    finalCutSize = CalculateCutSize(graph);
-    printf("\nInitial Cut Size: %d, Final Cut Size: %d\n", initialCutSize, finalCutSize);
-    
-    RunKLAlgorithmB(graph);
+    if (strcmp(option, "a") == 0)
+        elapsedTime = RunKLAlgorithmA(graph);
+    else if (strcmp(option, "b") == 0)
+        elapsedTime = RunKLAlgorithmB(graph);
+    else 
+    {
+        perror("Option is invalid. Expected 'a' or 'b'.");
+        exit(EXIT_FAILURE);
+    }
     finalCutSize = CalculateCutSize(graph);
     printf("\nInitial Cut Size: %d, Final Cut Size: %d\n", initialCutSize, finalCutSize);
     

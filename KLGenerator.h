@@ -11,15 +11,15 @@
 #ifndef __KLGENERATOR_H__
 #define __KLGENERATOR_H__
 
-void RunKLAlgorithmA(struct Graph* graph);
+double RunKLAlgorithmA(struct Graph* graph);
 
-void RunKLAlgorithmB(struct Graph* graph);
+double RunKLAlgorithmB(struct Graph* graph);
 
 struct Graph* GenerateGraphFromFile(const char* fileName);
 
 struct Heap** BuildHeapSetsFromGraph(struct Graph* graph);
 
-struct Heap** ReBuildHeapSetsFromGraph(struct Graph* graph);
+//struct Heap** ReBuildHeapSetsFromGraph(struct Graph* graph);
 
 void PrintHeaps(struct Heap** heaps);
 
