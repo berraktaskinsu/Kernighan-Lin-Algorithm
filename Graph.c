@@ -28,7 +28,7 @@ struct Graph* InitializeGraph(int numberOfVertices) {
 void AddEdgeToGraph(struct Graph* graph, int vertex1, int vertex2) {
 
     int index1 = vertex1 - 1, index2 = vertex2 - 1;
-    printf("Adding edge to graph: %d %d\n", index1, index2);
+    //printf("Adding edge to graph: %d %d\n", index1, index2);
 
     if (index1 < 0 ||
         index1 >= graph -> numberOfVertices ||
@@ -54,7 +54,6 @@ void AddNeighbor(struct Graph* graph, int index, int neighbour) {
 }
 
 bool EdgeExists(struct Graph* graph, int vertex1, int vertex2) {
-    printf("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\nAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA\n");
     if (vertex1 > graph -> numberOfVertices || vertex2 > graph -> numberOfVertices) 
     {
         perror("Vertex does not exist in graph");
@@ -64,7 +63,7 @@ bool EdgeExists(struct Graph* graph, int vertex1, int vertex2) {
     struct ListNode* current = graph -> listArray[vertex1 - 1].head;
     while (current != NULL) 
     {
-        printf("Source: %d, Dest: %d, NEIGHBOR: %d\n", vertex1, vertex2, current -> neighbour);
+        //printf("Source: %d, Dest: %d, NEIGHBOR: %d\n", vertex1, vertex2, current -> neighbour);
         if (current -> neighbour == vertex2) {
             return true;
         }

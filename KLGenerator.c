@@ -14,7 +14,7 @@
 void RunKLAlgorithm(struct Graph* graph) {
 
     
-    printf("_______________________Algorithm Started\n");
+    printf("_____________________________________________KL Algorithm_________________________________________________-\n");
 
     int iteration = 0;
     int gmax;
@@ -27,8 +27,7 @@ void RunKLAlgorithm(struct Graph* graph) {
             heaps = ReBuildHeapSetsFromGraph(graph);
         }
         iteration++;
-        PrintHeaps(heaps);
-        gmax = 0;
+        //PrintHeaps(heaps);
         double dValue;
         int vertex, myCount, yourCount;
         for (int setNo = 1 ; setNo < 3 ; setNo++) 
@@ -53,13 +52,14 @@ void RunKLAlgorithm(struct Graph* graph) {
                     current = current -> next;
                 }
                 dValue = yourCount - myCount;
-                printf("Set No: %d, Vertex: %d, D: %d\n", setNo, vertex, (int)dValue);
+                //printf("Set No: %d, Vertex: %d, D: %d\n", setNo, vertex, (int)dValue);
                 heaps[setNo - 1] -> heapArray[index].dValue = dValue;
             }
         }
         BuildHeap(heaps[0]);
         BuildHeap(heaps[1]);
-        PrintHeaps(heaps);
+        //printf("\nBefore Extraction:\n");
+        //PrintHeaps(heaps);
         struct HeapArrayElement* maxA;
         struct HeapArrayElement* maxB;
         int vertexA, vertexB, dValueA, dValueB, gain;
@@ -89,75 +89,108 @@ void RunKLAlgorithm(struct Graph* graph) {
                 gain -= 2;
                 
             }
-            printf("VA:%d VB:%d DA:%d DB:%d G:%d/n", vertexA, vertexB, dValueA, dValueB, gain);
+            //printf("\nAfter Extraction:\nVA:%d VB:%d DA:%d DB:%d G:%d\nUpdating D Values - Before:\n", vertexA, vertexB, dValueA, dValueB, gain);
+            //PrintHeaps(heaps);
             verticesA[index] = vertexA;
             verticesB[index] = vertexB;
             gains[index] = gain;
 
+            if (heaps[0] -> numberOfElements == 0 || heaps[1] -> numberOfElements == 0) {
+                // DO NOT EXTRACT OR UPDATE FURTHER
+                printf("Heaps are empty\n");
+                break;
+            }
+
             // UPDATE D VALUES
-            // for all neighbours of a and b, dvalue-= 2 or dvalue += 2
+            // for all neighbours of a and b, dvalue-= 1 or dvalue += 1
             struct ListNode* currentA = graph -> listArray[vertexA - 1].head;
             while (currentA != NULL) {
-                
-                int indexOfNeighbour = FindIndexOfVertex(heaps[0], currentA -> neighbour);
-                if (indexOfNeighbour != -1) {
-                    if (graph -> listArray[currentA -> neighbour - 1].set == 1) 
-                    {
-                        ChangeKeyByValue(heaps[0], indexOfNeighbour, 2);
-                    } 
-                    else if (graph -> listArray[currentA -> neighbour - 1].set == 2)
-                    {
-                        ChangeKeyByValue(heaps[0], indexOfNeighbour, -2);
+                int neighbourVertex = currentA -> neighbour;
+                int neighbourIndex;
+                if (graph -> listArray[neighbourVertex - 1].set == 1) {
+                    // same set - neighbour is in heaps[0]
+                    neighbourIndex = FindIndexOfVertex(heaps[0], neighbourVertex);
+                    if (neighbourIndex != -1) {
+                        //printf("**Index of vertex %d in heaps %d is %d\n", neighbourVertex, 0, neighbourIndex);
+                        ChangeKeyByValue(heaps[0], neighbourIndex, 2);
+                    }
+                }
+                else if (graph -> listArray[neighbourVertex - 1].set == 2)
+                {
+                    // neighbour is in heaps[1]
+                    neighbourIndex = FindIndexOfVertex(heaps[1], neighbourVertex);
+                    if (neighbourIndex != -1) {
+                        //printf("**Index of vertex %d in heaps %d is %d\n", neighbourVertex, 1, neighbourIndex);
+                        ChangeKeyByValue(heaps[1], neighbourIndex, -2);
                     }
                 }
                 currentA = currentA -> next;
             }
-            currentA = NULL;
 
             struct ListNode* currentB = graph -> listArray[vertexB - 1].head;
             while (currentB != NULL) {
-                
-                int indexOfNeighbour = FindIndexOfVertex(heaps[1], currentB -> neighbour);
-                if (indexOfNeighbour != -1) {
-                    if (graph -> listArray[currentB -> neighbour - 1].set == 1) 
-                    {
-                        ChangeKeyByValue(heaps[1], indexOfNeighbour, -2);
-                    } 
-                    else if (graph -> listArray[currentB -> neighbour - 1].set == 2)
-                    {
-                        ChangeKeyByValue(heaps[1], indexOfNeighbour, 2);
+                int neighbourVertex = currentB -> neighbour;
+                int neighbourIndex;
+                if (graph -> listArray[neighbourVertex - 1].set == 1) {
+                    // neighbour is in heaps[0]
+                    neighbourIndex = FindIndexOfVertex(heaps[0], neighbourVertex);
+                    if (neighbourIndex != -1) {
+                        //printf("**Index of vertex %d in heaps %d is %d\n", neighbourVertex, 0, neighbourIndex);
+                        ChangeKeyByValue(heaps[0], neighbourIndex, -2);
+                    }
+                    
+                }
+                else if (graph -> listArray[neighbourVertex - 1].set == 2)
+                {
+                    // same set - neighbour is in heaps[1]
+                    neighbourIndex = FindIndexOfVertex(heaps[1], neighbourVertex);
+                    if (neighbourIndex != -1) {
+                        //printf("**Index of vertex %d in heaps %d is %d\n", neighbourVertex, 1, neighbourIndex);
+                        ChangeKeyByValue(heaps[1], neighbourIndex, 2);
                     }
                 }
                 currentB = currentB -> next;
             }
-            currentB = NULL;
 
+            //printf("\nUpdating D Values - After:\n");
+            //PrintHeaps(heaps);
         }
         // find gmax and k
-        int k = 0;
-        printf("FINDING GMAX AND K\nGains: ");
+        /*
+        printf("\nVertices A: ");
+        for (int i = 0 ; i < minimumNumberOfElements ; i ++) {
+            printf("%d ",verticesA[i]);
+        }
+        printf("\n");
+        printf("Vertices B: ");
+        for (int i = 0 ; i < minimumNumberOfElements ; i ++) {
+            printf("%d ",verticesB[i]);
+        }
+        printf("\n");
+        printf("Gains: ");
         for (int i = 0 ; i < minimumNumberOfElements ; i ++) {
             printf("%d ",gains[i]);
         }
-        printf("\n");
+        printf("\n");*/
+        int k = 0;
         gmax = gains[0];
         int gUntilNow = gmax;
-        for (int index = 1 ; index < minimumNumberOfElements ; index++) 
+        for (int i = 1 ; i < minimumNumberOfElements ; i++) 
         {
-            gUntilNow += gains[index];
+            gUntilNow += gains[i];
             if (gUntilNow > gmax) {
-                k = index;
+                k = i;
                 gmax = gUntilNow;
             }
         }
-        printf("Iteration 1- k: %d - gmax: %d\n", k, gmax);
+        printf("Iteration %d- k: %d - gmax: %d\n", iteration, k, gmax);
 
         if (gmax > 0) {
-            printf("********************************EXCHANGE***********************************\n");
+            //printf("********************************EXCHANGE***********************************\n");
             
             // Switch the subsets (on graph)
             int changedA, changedB;
-            for (int index = 0 ; index < minimumNumberOfElements ; index++) 
+            for (int index = 0 ; index <= k ; index++) 
             {
                 
                 changedA = verticesA[index];
@@ -179,7 +212,7 @@ void RunKLAlgorithm(struct Graph* graph) {
         heaps = NULL;
     }
     while (gmax > 0);
-    printf("_______________________End\n");
+    printf("_____________________________________________KL Algorithm_________________________________________________-\n");
 }
 
 struct Graph* GenerateGraphFromFile(const char* fileName) {
@@ -220,7 +253,7 @@ struct Graph* GenerateGraphFromFile(const char* fileName) {
             while (getline(&line, &size, file) != -1) 
             {
                 sscanf(line, "%d %d", &vertex1, &vertex2);
-                printf("(%d, %d) ", vertex1, vertex2);
+                //printf("(%d, %d) ", vertex1, vertex2);
                 // Add Edge to Graph
                 AddEdgeToGraph(graph, vertex1, vertex2);
             }

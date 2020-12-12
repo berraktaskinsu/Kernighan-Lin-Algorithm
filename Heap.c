@@ -22,23 +22,6 @@ void AddElementToHeapSet(struct Heap* heap, int vertex) {
     heap -> numberOfElements ++;
 }
 
-/*void HeapInsert(struct Heap* heap, int vertex, double dValue) {
-    int index = heap -> numberOfElements;
-    heap -> heapArray[index].isValid = true;
-    while (index > 0 && heap -> heapArray[(int) floor(((double) index - 1) / 2.0)].dValue < dValue) 
-    {
-        // Switch parent and current
-        heap -> heapArray[index].dValue = heap -> heapArray[(int) floor(((double) index - 1) / 2.0)].dValue;
-        heap -> heapArray[index].vertex = heap -> heapArray[(int) floor(((double) index - 1) / 2.0)].vertex;
-        index = (int) floor(((double) index - 1) / 2.0);
-    }
-    heap -> heapArray[index].dValue = dValue;
-    heap -> heapArray[index].vertex = vertex;
-    heap -> numberOfElements++;
-}*/
-
-//void HeapDelete(struct Heap* heap, int vertex) {}
-
 void Heapify(struct Heap* heap, int index) {
     int n = heap -> numberOfElements;
     int indexOfLargest = index;
@@ -68,7 +51,6 @@ void BuildHeap(struct Heap* heap) {
     }
 }
 
-// TODO: Implement
 struct HeapArrayElement* ExtractMax(struct Heap* heap) {
     struct HeapArrayElement* maxElement = (struct HeapArrayElement*) malloc(sizeof(struct HeapArrayElement));
     maxElement -> dValue = heap -> heapArray[0].dValue;
@@ -124,7 +106,7 @@ void HeapDecreaseKey(struct Heap* heap, int index, int key) {
 void PrintHeap(struct Heap* heap) {
     for (int index = 0 ; index < heap -> capacity ; index++) 
     {
-        printf("Vertex: %d, D: %d, isValid:%s\n", (heap -> heapArray)[index].vertex, (int) heap ->heapArray[index].dValue, (heap -> heapArray)[index].isValid ? "true" : "false");
+        printf("Index: %d, Vertex: %d, D: %d, isValid: %s\n", index, (heap -> heapArray)[index].vertex, (int) heap ->heapArray[index].dValue, (heap -> heapArray)[index].isValid ? "true" : "false");
     }
 }
 
