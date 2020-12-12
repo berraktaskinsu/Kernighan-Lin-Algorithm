@@ -267,28 +267,6 @@ struct Graph* GenerateGraphFromFile(const char* fileName) {
     return graph;
 }
 
-/*
-struct Set** BuildSetsFromGraph(struct Graph* graph) {
-    int numberOfVertices1 = ceil(((double) (graph -> numberOfVertices)) / 2.0);
-    int numberOfVertices2 = floor(((double) (graph -> numberOfVertices)) / 2.0);
-
-    struct Set** sets = malloc(2 * sizeof(struct Set*));
-    sets[0] = InitializeSet(numberOfVertices1);
-    sets[1] = InitializeSet(numberOfVertices2);
-
-    int index;
-    for (index = 0 ; index < numberOfVertices1 ; index++) {
-        AddElementToSet(sets[0], index + 1);
-        graph -> listArray[index].set = 1;
-    }
-    for ( ; index < numberOfVertices1 + numberOfVertices2 ; index++) {
-        AddElementToSet(sets[1], index + 1);
-        graph -> listArray[index].set = 2;
-    }
-    
-    return sets;
-}
-*/
 struct Heap** BuildHeapSetsFromGraph(struct Graph* graph) {
     int numberOfVertices1 = ceil(((double) (graph -> numberOfVertices)) / 2.0);
     int numberOfVertices2 = floor(((double) (graph -> numberOfVertices)) / 2.0);
@@ -328,13 +306,6 @@ struct Heap** ReBuildHeapSetsFromGraph(struct Graph* graph) {
     return heapSets;
 }
 
-/*void PrintSets(struct Set** sets) {
-    printf("Set 1: ");
-    PrintSet(sets[0]);
-    printf("Set 2: ");
-    PrintSet(sets[1]);
-}*/
-
 void PrintHeaps(struct Heap** heaps) {
     printf("Heap 1:\n");
     PrintHeap(heaps[0]);
@@ -345,18 +316,6 @@ void PrintHeaps(struct Heap** heaps) {
 void DeleteGraph(struct Graph* graph) {
     DeallocateGraph(graph);
 }
-
-/*void DeleteSets(struct Set** sets) {
-    DeleteSet(sets[0]);
-    DeleteSet(sets[1]);
-    sets[0] = NULL;
-    sets[1] = NULL;
-    free(sets);
-}
-
-void DeleteSet(struct Set* set) {
-    DeallocateSet(set);
-}*/
 
 void DeleteHeaps(struct Heap** heaps) {
     DeleteHeap(heaps[0]);
