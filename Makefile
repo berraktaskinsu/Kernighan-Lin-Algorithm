@@ -1,10 +1,10 @@
 CC=gcc
-CFLAGS=-g -Wall
+CFLAGS=-g -Wall -pg
 
 all: KL
 
 KL: Main.o KLGenerator.o Graph.o Heap.o Helper.o
-	$(CC) $(CFLAGS) -o KL Main.o KLGenerator.o Graph.o Heap.o Helper.o -lm
+	$(CC) $(CFLAGS) Main.o KLGenerator.o Graph.o Heap.o Helper.o -lm -pg -o KL 
 
 Main.o: Main.c KLGenerator.h
 	$(CC) $(CFLAGS) -c Main.c
